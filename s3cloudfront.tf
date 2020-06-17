@@ -25,8 +25,6 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
   comment = "This is for S3 access"
 }
 
-
-
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket.b.bucket_regional_domain_name
@@ -100,10 +98,10 @@ resource "aws_s3_bucket_policy" "policy" {
 }
 
 output "cfdetails"{
- value = aws_cloudfront_distribution.s3_distribution
+ value = aws_cloudfront_distribution.s3_distribution.domain_name
 }
 
-
+/*
 output "s3origin"{
  value = aws_cloudfront_origin_access_identity.origin_access_identity
 }
@@ -111,3 +109,4 @@ output "s3origin"{
 output "s3iampolicy"{
  value = aws_s3_bucket_policy.policy
 }
+*/

@@ -37,10 +37,6 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-output "secgrp" {
-  value = aws_security_group.allow_http
-}
-
 resource "aws_iam_role" "role" {
   name = "s3_role"
   assume_role_policy = file("assume-role-policy.json")
@@ -138,7 +134,7 @@ provisioner "remote-exec" {
       "sudo rm -rf /var/www/html/*",
       "sudo git clone https://github.com/kanchandafane/webapp.git /var/www/html/",
       "aws s3 cp /var/www/html/quino-al-5WMkrgjCzFo-unsplash.jpg s3://${aws_s3_bucket.b.id}/images/sunset.jpg",
-      "sed 's+changesrc+https://${aws_cloudfront_distribution.s3_distribution.domain_name}+g' /var/www/html/index.html"  
+      "sed -i 's+changesrc+https://${aws_cloudfront_distribution.s3_distribution.domain_name}+g' /var/www/html/index.html"  
     ]
   }
 }
@@ -150,6 +146,6 @@ depends_on = [
   ]
 
 	provisioner "local-exec" {
-	    command = "open -a 'Google Chrome' ${aws_instance.web.public_ip}"
+	    command = "open -a 'Google Chrome' http://${aws_instance.web.public_ip}/index.html"
   	}
 }
