@@ -41,27 +41,26 @@ output "secgrp" {
   value = aws_security_group.allow_http
 }
 
+resource "aws_iam_role" "role" {
+  name = "s3_role"
+  assume_role_policy = file("assume-role-policy.json")
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test-policy"
+  description = "A test policy"
+  policy      = file("s3_policy.json")
+}
+
+resource "aws_iam_policy_attachment" "test-attach" {
+  name       = "test-attachment"
+  roles      = [aws_iam_role.role.name]
+  policy_arn = aws_iam_policy.policy.arn
+}
+
 resource "aws_iam_instance_profile" "s3_instance_profile" {
   name = "s3_instance_profile"
   role = aws_iam_role.role.name
-}
-
-resource "aws_iam_role" "role" {
-  name = "s3_role"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement":
-        {
-            "Action": "s3:*"
-            "Effect": "Allow",
-            "Resource": "*",
-            "Sid": "s1"
-        }  
-}
-EOF
 }
 
 resource "aws_instance" "web" {
