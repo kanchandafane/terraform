@@ -133,8 +133,8 @@ provisioner "remote-exec" {
       "sudo mount  /dev/xvdh  /var/www/html",
       "sudo rm -rf /var/www/html/*",
       "sudo git clone https://github.com/kanchandafane/webapp.git /var/www/html/",
-      "aws s3 cp /var/www/html/quino-al-5WMkrgjCzFo-unsplash.jpg s3://${aws_s3_bucket.b.id}/images/sunset.jpg",
-      "sed -i 's+changesrc+https://${aws_cloudfront_distribution.s3_distribution.domain_name}+g' /var/www/html/index.html"  
+      "sudo aws s3 cp /var/www/html/quino-al-5WMkrgjCzFo-unsplash.jpg s3://${aws_s3_bucket.b.id}/images/sunset.jpg",
+      "sudo sed -i 's+changesrc+https://${aws_cloudfront_distribution.s3_distribution.domain_name}+g' /var/www/html/index.html"  
     ]
   }
 }
